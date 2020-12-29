@@ -4,6 +4,14 @@ import StartGameScreen from './screens/StartGameScreen';
 import Header from './components/Header';
 import GameScreen from './components/GameScreen';
 import Gameover from './components/Gameover';
+import * as Font from 'expo-font';
+
+const fetchFonts = () => {
+	return Font.loadAsync({
+		'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+		'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
+	});
+};
 
 export default function App() {
 	const restartNewGame = () => {
