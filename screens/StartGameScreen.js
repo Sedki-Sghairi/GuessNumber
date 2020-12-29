@@ -36,7 +36,8 @@ export default function StartGameScreen(props) {
 		return confirmed ? (
 			<Card style={styles.marginized}>
 				<Text>Number Chosen:</Text>
-				<SelectedNumber startGameHandler={props.startGameHandler}>{selectedNumber}</SelectedNumber>
+				<SelectedNumber>{selectedNumber}</SelectedNumber>
+				<Button title="Start" onPress={() => props.startGameHandler(selectedNumber)} />
 			</Card>
 		) : null;
 	};

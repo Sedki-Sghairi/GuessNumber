@@ -6,7 +6,6 @@ export default function SelectedNumber(props) {
 	return (
 		<View style={styles.contaier}>
 			<Text style={styles.number}>{props.children}</Text>
-			<Button title="Start" onPress={() => props.startGameHandler(props.children)} />
 		</View>
 	);
 }
@@ -26,6 +25,7 @@ const styles = StyleSheet.create({
 		color: colors.blue,
 		marginVertical: 10,
 		fontSize: 30,
-		textAlign: 'center'
+		textAlign: 'center',
+		paddingHorizontal: 10
 	}
 });
