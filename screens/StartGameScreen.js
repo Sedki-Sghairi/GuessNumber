@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import Card from '../components/Card';
 import Input from '../components/Input';
 import { colors } from '../constants/colors';
 export default function StartGameScreen(props) {
 	const [ number, setNumber ] = useState('');
 	const [ confirmed, setConfirmed ] = useState(false);
+	const [ selectedNumber, setSelectedNumber ] = useState();
 	const handleChange = (input) => {
 		setNumber(input.replace(/[^0-9]/g, ''));
 	};
@@ -14,14 +15,23 @@ export default function StartGameScreen(props) {
 		setConfirmed(false);
 	};
 	const confirmInputHandler = () => {
-		if (number == '' || number <= 0 || number > 99) {
+		const chosenNumber = parseInt(number);
+		if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+			Alert.alert('Invalid Number!', 'Number has to be between 1 and 99.', [
+				{
+					text: 'Okay',
+					style: 'destructive',
+					onPress: resetInputHandler
+				}
+			]);
 			return;
 		}
 		setConfirmed(true);
 		setNumber('');
+		setSelectedNumber(chosenNumber);
 	};
-	let Sedki = () => {
-		return confirmed ? <Text>{number}</Text> : null;
+	const ConfirmedOutput = () => {
+		return confirmed ? <Text>{selectedNumber}</Text> : null;
 	};
 
 	return (
@@ -47,7 +57,7 @@ export default function StartGameScreen(props) {
 						</View>
 					</View>
 				</Card>
-				<Sedki />
+				<ConfirmedOutput />
 			</View>
 		</TouchableWithoutFeedback>
 	);
