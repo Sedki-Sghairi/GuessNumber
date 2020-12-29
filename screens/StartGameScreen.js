@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import Card from '../components/Card';
 import Input from '../components/Input';
+import SelectedNumber from '../components/SelectedNumber';
 import { colors } from '../constants/colors';
 export default function StartGameScreen(props) {
 	const [ number, setNumber ] = useState('');
@@ -15,6 +16,7 @@ export default function StartGameScreen(props) {
 		setConfirmed(false);
 	};
 	const confirmInputHandler = () => {
+		Keyboard.dismiss();
 		const chosenNumber = parseInt(number);
 		if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
 			Alert.alert('Invalid Number!', 'Number has to be between 1 and 99.', [
@@ -31,7 +33,12 @@ export default function StartGameScreen(props) {
 		setSelectedNumber(chosenNumber);
 	};
 	const ConfirmedOutput = () => {
-		return confirmed ? <Text>{selectedNumber}</Text> : null;
+		return confirmed ? (
+			<Card style={styles.marginized}>
+				<Text>Number Chosen:</Text>
+				<SelectedNumber startGameHandler={props.startGameHandler}>{selectedNumber}</SelectedNumber>
+			</Card>
+		) : null;
 	};
 
 	return (
@@ -89,5 +96,9 @@ const styles = StyleSheet.create({
 	input: {
 		width: 50,
 		textAlign: 'center'
+	},
+	marginized: {
+		marginVertical: 10,
+		alignItems: 'center'
 	}
 });
