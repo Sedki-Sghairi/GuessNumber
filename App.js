@@ -6,6 +6,10 @@ import GameScreen from './components/GameScreen';
 import Gameover from './components/Gameover';
 
 export default function App() {
+	const restartNewGame = () => {
+		setRounds(0);
+		setUserNumber(null);
+	};
 	const gameOverHandler = (rounds) => {
 		setRounds(rounds);
 	};
@@ -13,13 +17,12 @@ export default function App() {
 	const [ rounds, setRounds ] = useState(0);
 	const startGameHandler = (selectedNumber) => {
 		setUserNumber(selectedNumber);
-		setRounds(0);
 	};
 	let content = <StartGameScreen startGameHandler={startGameHandler} />;
 	if (userNumber && rounds === 0) {
 		content = <GameScreen userChoice={userNumber} gameOverHandler={gameOverHandler} />;
 	} else if (rounds > 0) {
-		content = <Gameover />;
+		content = <Gameover restartNewGame={restartNewGame} rounds={rounds} />;
 	}
 
 	return (
