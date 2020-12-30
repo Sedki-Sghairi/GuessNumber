@@ -1,14 +1,17 @@
 import React from 'react';
-import { Button, Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../constants/colors';
+import MainBtn from './MainBtn';
 
 export default function Gameover(props) {
 	return (
 		<View style={styles.screen}>
 			<Text style={styles.gameover}>game over</Text>
-			<Image style={styles.image} source={require('../assets/success.png')} />
-			<Text style={styles.marginized}>Number of Rounds: {props.rounds}</Text>
-			<Button title="New Game" onPress={props.restartNewGame} />
+			<Image fadeDuration={1000} style={styles.image} source={require('../assets/success.png')} />
+			<Text style={styles.marginized}>
+				Number of Rounds: <Text style={styles.highlit}>{props.rounds}</Text>
+			</Text>
+			<MainBtn title="New Game" onPress={props.restartNewGame} />
 		</View>
 	);
 }
@@ -21,7 +24,10 @@ const styles = StyleSheet.create({
 	},
 	gameover: {
 		color: colors.orange,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
+		marginBottom: 6,
+		textTransform: 'capitalize',
+		letterSpacing: 8
 	},
 	marginized: {
 		marginVertical: 10
@@ -30,5 +36,10 @@ const styles = StyleSheet.create({
 		width: '80%',
 		height: 300,
 		borderRadius: 10
+	},
+	highlit: {
+		color: colors.orange,
+		fontSize: 30,
+		fontWeight: 'bold'
 	}
 });

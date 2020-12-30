@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Card from './Card';
 import SelectedNumber from './SelectedNumber';
-
+// import { Ionicons } from '@expo/vector-icons';
 const generateRandomBetween = (min, max, exclude) => {
 	min = Math.ceil(min);
 	max = Math.floor(max);
@@ -14,8 +14,9 @@ const generateRandomBetween = (min, max, exclude) => {
 	}
 };
 const GameScreen = (props) => {
-	const [ currentGuess, setCurrentGuess ] = useState(generateRandomBetween(1, 100, props.userChoice));
-	const [ rounds, setRounds ] = useState(0);
+	const initialGuess = generateRandomBetween(1, 100, props.userChoice);
+	const [ currentGuess, setCurrentGuess ] = useState(initialGuess);
+	const [ rounds, setRounds ] = useState([ initialGuess ]);
 	const currentLow = useRef(1);
 	const currentHight = useRef(100);
 	const guess = (direction) => {
@@ -35,10 +36,10 @@ const GameScreen = (props) => {
 			if (direction === 'lower') {
 				currentHight.current = currentGuess;
 			} else {
-				currentLow.current = currentGuess;
+				currentLow.current = currentGuess + 1;
 			}
 			const nexGuess = generateRandomBetween(currentLow.current, currentHight.current, currentGuess);
-			setRounds((currentRound) => currentRound + 1);
+			setRounds((currentRound) => [ nexGuess, ...currentRound ]);
 			setCurrentGuess(nexGuess);
 		}
 	};
@@ -46,7 +47,7 @@ const GameScreen = (props) => {
 	useEffect(
 		() => {
 			if (currentGuess === userChoice) {
-				gameOverHandler(rounds);
+				gameOverHandler(rounds.length);
 			}
 			return () => {
 				//
@@ -59,9 +60,20 @@ const GameScreen = (props) => {
 			<Text>Oponent's Guess:</Text>
 			<SelectedNumber>{currentGuess}</SelectedNumber>
 			<Card style={styles.container}>
-				<Button title="LOWER" onPress={guess.bind(this, 'lower')} />
-				<Button title="GREATER" onPress={guess.bind(this, 'greater')} />
+				<View style={styles.btn}>
+					<Button title="LOWER" onPress={guess.bind(this, 'lower')} />
+				</View>
+				<View style={styles.btn}>
+					<Button title="GREATER" onPress={guess.bind(this, 'greater')} />
+				</View>
 			</Card>
+			<ScrollView>
+				{rounds.map((round) => (
+					<View key={round}>
+						<Text>{round}</Text>
+					</View>
+				))}
+			</ScrollView>
 		</View>
 	);
 };
@@ -80,5 +92,8 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		width: 300,
 		maxWidth: '80%'
+	},
+	btn: {
+		flex: 1
 	}
 });

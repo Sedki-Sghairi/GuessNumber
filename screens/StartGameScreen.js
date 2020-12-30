@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import Card from '../components/Card';
 import Input from '../components/Input';
+import MainBtn from '../components/MainBtn';
 import SelectedNumber from '../components/SelectedNumber';
 import { colors } from '../constants/colors';
 export default function StartGameScreen(props) {
@@ -37,7 +38,7 @@ export default function StartGameScreen(props) {
 			<Card style={styles.marginized}>
 				<Text>Number Chosen:</Text>
 				<SelectedNumber>{selectedNumber}</SelectedNumber>
-				<Button title="Start" onPress={() => props.startGameHandler(selectedNumber)} />
+				<MainBtn title="Start" onPress={() => props.startGameHandler(selectedNumber)} />
 			</Card>
 		) : null;
 	};
@@ -89,8 +90,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 20,
-		marginVertical: 10,
-		fontFamily: 'open-sans-bold'
+		marginVertical: 10
 	},
 	btn: {
 		width: 100
