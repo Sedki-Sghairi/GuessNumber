@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Alert, Button, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Card from './Card';
+import { colors } from '../constants/colors';
 import SelectedNumber from './SelectedNumber';
 // import { Ionicons } from '@expo/vector-icons';
 const generateRandomBetween = (min, max, exclude) => {
@@ -12,6 +13,14 @@ const generateRandomBetween = (min, max, exclude) => {
 	} else {
 		return rndNumb;
 	}
+};
+const renderListItem = (round, numRound) => {
+	return (
+		<View key={round} style={styles.listItem}>
+			<Text>#{numRound}</Text>
+			<Text>{round}</Text>
+		</View>
+	);
 };
 const GameScreen = (props) => {
 	const initialGuess = generateRandomBetween(1, 100, props.userChoice);
@@ -67,13 +76,9 @@ const GameScreen = (props) => {
 					<Button title="GREATER" onPress={guess.bind(this, 'greater')} />
 				</View>
 			</Card>
-			<ScrollView>
-				{rounds.map((round) => (
-					<View key={round}>
-						<Text>{round}</Text>
-					</View>
-				))}
-			</ScrollView>
+			<View style={styles.list}>
+				<ScrollView>{rounds.map((round, index) => renderListItem(round, rounds.length - index))}</ScrollView>
+			</View>
 		</View>
 	);
 };
@@ -94,6 +99,18 @@ const styles = StyleSheet.create({
 		maxWidth: '80%'
 	},
 	btn: {
+		flex: 1
+	},
+	listItem: {
+		borderColor: colors.primaryLight,
+		borderWidth: 1,
+		marginVertical: 10,
+		backgroundColor: 'white',
+		flexDirection: 'row',
+		justifyContent: 'space-around'
+	},
+	list: {
+		width: '80%',
 		flex: 1
 	}
 });
