@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Alert, Button, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Alert, Button, ScrollView, StyleSheet, Text, View, Dimensions, useWindowDimensions } from 'react-native';
 import Card from './Card';
 import { colors } from '../constants/colors';
 import SelectedNumber from './SelectedNumber';
@@ -26,6 +26,9 @@ const GameScreen = (props) => {
 	const initialGuess = generateRandomBetween(1, 100, props.userChoice);
 	const [ currentGuess, setCurrentGuess ] = useState(initialGuess);
 	const [ rounds, setRounds ] = useState([ initialGuess ]);
+	//adjust btn width according to screen size:
+	const [ btnWidth, setBtnWidth ] = useState(Dimensions.get('window').width / 4);
+
 	const currentLow = useRef(1);
 	const currentHight = useRef(100);
 	const guess = (direction) => {
@@ -64,23 +67,55 @@ const GameScreen = (props) => {
 		},
 		[ currentGuess, userChoice, gameOverHandler ]
 	);
-	return (
-		<View style={styles.screen}>
-			<Text>Oponent's Guess:</Text>
-			<SelectedNumber>{currentGuess}</SelectedNumber>
-			<Card style={styles.container}>
-				<View style={styles.btn}>
-					<Button title="LOWER" onPress={guess.bind(this, 'lower')} />
+	useEffect(() => {
+		const changeLayout = () => {
+			setBtnWidth(Dimensions.get('window').width / 4);
+		};
+		Dimensions.addEventListener('change', changeLayout);
+		return () => {
+			Dimensions.removeEventListener('change', changeLayout);
+		};
+	}, []);
+	if (Dimensions.get('window').height < 500) {
+		return (
+			<View style={styles.screen}>
+				<Text>Oponent's Guess:</Text>
+				<View style={styles.containerRow}>
+					<View style={{ width: btnWidth }}>
+						<Button title="LOWER" onPress={guess.bind(this, 'lower')} />
+					</View>
+					<SelectedNumber>{currentGuess}</SelectedNumber>
+					<View style={{ width: btnWidth }}>
+						<Button title="GREATER" onPress={guess.bind(this, 'greater')} />
+					</View>
 				</View>
-				<View style={styles.btn}>
-					<Button title="GREATER" onPress={guess.bind(this, 'greater')} />
+				<View style={styles.list}>
+					<ScrollView>
+						{rounds.map((round, index) => renderListItem(round, rounds.length - index))}
+					</ScrollView>
 				</View>
-			</Card>
-			<View style={styles.list}>
-				<ScrollView>{rounds.map((round, index) => renderListItem(round, rounds.length - index))}</ScrollView>
 			</View>
-		</View>
-	);
+		);
+	} else
+		return (
+			<View style={styles.screen}>
+				<Text>Oponent's Guess:</Text>
+				<SelectedNumber>{currentGuess}</SelectedNumber>
+				<Card style={styles.container}>
+					<View style={{ width: btnWidth }}>
+						<Button title="LOWER" onPress={guess.bind(this, 'lower')} />
+					</View>
+					<View style={{ width: btnWidth }}>
+						<Button title="GREATER" onPress={guess.bind(this, 'greater')} />
+					</View>
+				</Card>
+				<View style={styles.list}>
+					<ScrollView>
+						{rounds.map((round, index) => renderListItem(round, rounds.length - index))}
+					</ScrollView>
+				</View>
+			</View>
+		);
 };
 
 export default GameScreen;
@@ -94,13 +129,10 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-		marginTop: 20,
+		marginTop: Dimensions.get('window').height > 600 ? 20 : 10,
 		width: '80%',
 		maxWidth: '95%',
 		minWidth: 300
-	},
-	btn: {
-		width: Dimensions.get('window').width / 3
 	},
 	listItem: {
 		borderColor: colors.primaryLight,
@@ -113,5 +145,11 @@ const styles = StyleSheet.create({
 	list: {
 		width: '80%',
 		flex: 1
+	},
+	containerRow: {
+		flexDirection: 'row',
+		width: '80%',
+		justifyContent: 'space-between',
+		alignItems: 'center'
 	}
 });

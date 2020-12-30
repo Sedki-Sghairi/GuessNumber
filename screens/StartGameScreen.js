@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	Button,
+	KeyboardAvoidingView,
+	TouchableWithoutFeedback,
+	Keyboard,
+	Alert,
+	ScrollView
+} from 'react-native';
 import Card from '../components/Card';
 import Input from '../components/Input';
 import MainBtn from '../components/MainBtn';
@@ -44,31 +54,35 @@ export default function StartGameScreen(props) {
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			<View style={styles.screen}>
-				<Text style={styles.title}>Start A New Game!</Text>
-				<Card style={styles.inputContainer}>
-					<Text>Select A Number</Text>
-					<Input
-						style={styles.input}
-						keyboadType="number-pad"
-						maxLength={2}
-						blurOnSbmit
-						onChangeText={handleChange}
-						value={number}
-					/>
-					<View style={styles.buttonContainer}>
-						<View style={styles.btn}>
-							<Button color={colors.orange} title="reset" onPress={resetInputHandler} />
-						</View>
-						<View style={styles.btn}>
-							<Button color="green" title="confirm" onPress={confirmInputHandler} />
-						</View>
+		<ScrollView>
+			<KeyboardAvoidingView behavior="position" keyboardVerticalOffset={30}>
+				<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+					<View style={styles.screen}>
+						<Text style={styles.title}>Start A New Game!</Text>
+						<Card style={styles.inputContainer}>
+							<Text>Select A Number</Text>
+							<Input
+								style={styles.input}
+								keyboadType="number-pad"
+								maxLength={2}
+								blurOnSbmit
+								onChangeText={handleChange}
+								value={number}
+							/>
+							<View style={styles.buttonContainer}>
+								<View style={styles.btn}>
+									<Button color={colors.orange} title="reset" onPress={resetInputHandler} />
+								</View>
+								<View style={styles.btn}>
+									<Button color="green" title="confirm" onPress={confirmInputHandler} />
+								</View>
+							</View>
+						</Card>
+						<ConfirmedOutput />
 					</View>
-				</Card>
-				<ConfirmedOutput />
-			</View>
-		</TouchableWithoutFeedback>
+				</TouchableWithoutFeedback>
+			</KeyboardAvoidingView>
+		</ScrollView>
 	);
 }
 const styles = StyleSheet.create({

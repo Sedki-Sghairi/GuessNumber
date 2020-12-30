@@ -1,18 +1,34 @@
-import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../constants/colors';
 import MainBtn from './MainBtn';
 
 export default function Gameover(props) {
+	const [ imgWidth, setImgWidth ] = useState(Dimensions.get('window').width * 0.6);
+	useEffect(() => {
+		const changeWidth = () => {
+			setImgWidth(Dimensions.get('window').width * 0.6);
+		};
+		Dimensions.addEventListener('change', changeWidth);
+		return () => {
+			Dimensions.removeEventListener('change', changeWidth);
+		};
+	}, []);
 	return (
-		<View style={styles.screen}>
-			<Text style={styles.gameover}>game over</Text>
-			<Image fadeDuration={1000} style={styles.image} source={require('../assets/success.png')} />
-			<Text style={styles.marginized}>
-				Number of Rounds: <Text style={styles.highlit}>{props.rounds}</Text>
-			</Text>
-			<MainBtn title="New Game" onPress={props.restartNewGame} />
-		</View>
+		<ScrollView>
+			<View style={styles.screen}>
+				<Text style={styles.gameover}>game over</Text>
+				<Image
+					fadeDuration={1000}
+					style={(styles.image, { width: imgWidth, height: imgWidth })}
+					source={require('../assets/success.png')}
+				/>
+				<Text style={styles.marginized}>
+					Number of Rounds: <Text style={styles.highlit}>{props.rounds}</Text>
+				</Text>
+				<MainBtn title="New Game" onPress={props.restartNewGame} />
+			</View>
+		</ScrollView>
 	);
 }
 
@@ -33,8 +49,6 @@ const styles = StyleSheet.create({
 		marginVertical: 10
 	},
 	image: {
-		width: '80%',
-		height: 300,
 		borderRadius: 10
 	},
 	highlit: {

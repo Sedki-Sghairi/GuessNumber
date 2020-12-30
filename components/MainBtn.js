@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#009688',
 		borderRadius: 10,
 		paddingVertical: 10,
-		paddingHorizontal: 12
+		paddingHorizontal: 12,
+		marginBottom: 5
 	},
 	appButtonText: {
 		fontSize: 18,
