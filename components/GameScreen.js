@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Alert, Button, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native';
 import Card from './Card';
 import { colors } from '../constants/colors';
 import SelectedNumber from './SelectedNumber';
@@ -95,11 +95,12 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		marginTop: 20,
-		width: 300,
-		maxWidth: '80%'
+		width: '80%',
+		maxWidth: '95%',
+		minWidth: 300
 	},
 	btn: {
-		flex: 1
+		width: Dimensions.get('window').width / 3
 	},
 	listItem: {
 		borderColor: colors.primaryLight,
